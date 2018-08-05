@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>网页播放器</title>
+		<style type="text/css">
+			*{margin: 0;padding: 0;}
+			body{
+				background: url(img/bg1.jpg);
+				background-size:cover;
+			}
+			.nav{
+				background:url(img/m_bg.jpg);
+				width:960px;
+				height:250px;
+				margin:80px;
+				opacity: 0.6;
+			}
+			.nav ul li{
+				list-style: none;
+				cursor:pointer;
+				position:absolute;
+			}
+			.nav ul li img{
+				border-radius:50%;
+			}
+			.nav .m1{
+				left:70px;
+				top:100px;
+			}
+			.nav .m2{
+				left: 230px;
+				top: 200px;
+			}
+			.nav .m3{
+				left: 388px;
+				top: 147px;
+			}
+			.nav .m4{
+				left: 570px;
+				top: 130px;
+			}
+			.nav .m5{
+				left: 650px;
+				top: 251px;
+			}
+			.music{
+				width: 550px;
+				height: 120px;
+				background: #000;
+				position: fixed;/*锁死的状态*/
+				box-shadow: 1px 1px 15px 1px #000;
+				opacity: 0.8;
+			}
+			.music .m-img{
+				width: 90px;
+				height: 90px;
+				margin-top: 15px;
+				margin-left: 10px;
+				float: left;/*左漂浮*/
+			}
+			.music .m-text{
+				color: #fff;
+				font-size: 20px;
+				font-weight: bold;
+				width: 200px;
+				height: 90px;
+				line-height: 80px;
+				margin-top: 15px;
+				margin-left: 10px;
+				float: left;
+			}
+			.music .m-btn{
+				float: left;
+				margin-top: 35px;
+				
+			}
+			.music .m-btn a{
+				background: url(img/player_bg.png)no-repeat;
+				width: 35px;
+				height: 35px;
+				float: left;
+			}
+			.music .m-btn .m-prev{
+				background-position: -70px 0px;
+			}
+			.music .m-btn .m-prev:hover{
+				background-position: -70px -32px;
+			}
+			.music .m-btn .m-play{
+				background-position: -110px -3px;
+			}
+			.music .m-btn .m-next{
+				background-position: -150px 0px;
+			}
+			.music .m-btn .m-next:hover{
+				background-position: -150px -31px;
+			}
+
+			/*定义图片旋转方式*/
+			@keyframes rotateM{
+				from{-webkit-transform: rotate(0deg);}
+				to{-webkit-transform: rotate(360deg);}
+			}
+			.rotateM{
+				-webkit-animation: rotateM 2s infinite linear;
+			}
+			.pause{
+				background: url(img/player_bg.png)no-repeat -293px -91px !important;
+			}
+			.pause:hover{
+				background: url(img/player_bg.png)no-repeat -337px -91px !important;
+			}
+			.music .m-close{
+				width: 23px;
+				height: 120px;
+				float: right;
+				background: url(img/player_bg.png)no-repeat;
+				margin-top: 2px;
+				cursor: pointer;
+			}
+			.open{
+				background: url(img/player_bg.png)no-repeat -22px -1px !important;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="nav">
+			<ul>
+				<li class="m1" datasrc="mp3/1.mp3" title="倩女幽魂-张国荣">
+					<img src="img/1.jpg" width="60px"/>
+				</li>
+				<li class="m2" datasrc="mp3/2.mp3" title="小幸运-Hebe">
+					<img src="img/2.jpg" width="90px"/>
+				</li>
+				<li class="m3" datasrc="mp3/3.mp3" title="绅士-薛之谦">
+					<img src="img/3.jpg" width="120px"/>
+				</li>
+				<li class="m4" datasrc="mp3/4.mp3" title="杀手-林俊杰">
+					<img src="img/4.jpg" width="90px"/>
+				</li>
+				<li class="m5" datasrc="mp3/5.mp3" title="晴天-周杰伦">
+					<img src="img/5.jpg" width="60px"/>
+				</li>
+			</ul>
+		</div>
+
+		<div class="music">
+			<div class="m-img">
+				<img src="img/1.jpg" width="90px"/>
+			</div>
+			<div class="m-text">倩女幽魂-张国荣</div>
+			<div class="m-btn">
+				<a href="#" class="m-prev"></a>
+				<a href="#" class="m-play"></a>
+				<a href="#" class="m-next"></a>
+				
+			</div>
+			<div id="aa" class="m-close"></div>
+			<audio src="map3/1.mp3" class="m-mp3"></audio>
+		</div>
+	</body>
+	<script type="text/javascript" src="js/jquery-3.0.0.min.js" ></script>
+	<script>
+		
+		var index =0 ;
+		var li = $(".nav ul li");
+		var img=$(".music .m-img img");
+		var text=$(".music .m-text");
+		var prev=$(".music .m-btn .m-prev");
+		var play=$(".music .m-btn .m-play");
+		var next=$(".music .m-btn .m-next");
+		var flag=true;
+		var close=true;
+		
+		
+		li.click(function(){
+			index= $(this).index();
+			getPlay();
+		})
+		function getPlay(){
+			changeBG();
+			img.attr("src","img/"+(index+1)+".jpg");
+			var title = li.eq(index).attr("title");
+			text.text(title);
+			var music=li.eq(index).attr("datasrc");
+			$(".m-mp3").attr("src",music).get(0).play();
+			li.eq(index).children().addClass("rotateM").parent().siblings().children().removeClass("rotateM");
+			flag=false;
+		}
+		function changeBG(){
+
+			$("body").show().css("background","url(img/"+(index+1)+"_bg.jpg");
+			$("body").show().css("background-size","cover");
+		}
+		prev.click(function(){
+			index--;
+			if(index<0){
+				index=4;
+			}
+			getPlay();
+		})
+		
+		next.click(function(){
+			index++;
+			if(index>4){
+				index=0;
+				
+			}
+			getPlay();
+		})
+		play.click(function(){
+			if(flag){
+				$(".m-mp3").get(0).play();
+				$(this).addClass("pause");
+				li.eq(index).children().addClass("rotateM");
+				flag=false;
+			}else{
+				$(".m-mp3").get(0).pause();
+				$(this).removeClass("pause");
+				li.eq(index).children().removeClass("rotateM");
+				flag=true;
+			}
+		})
+		/*显示和隐藏播放器部分*/
+		$(".music .m-close").click(function(){
+			if(close){
+				$(this).addClass("open");
+				$(".music").animate({"left":"-530px"},800);
+				close=false;
+			}else{
+				$(this).removeClass("open");
+				$(".music").animate({"left":"0px"},800);
+				close=true;
+			}
+		})
+	</script>
+</html>
